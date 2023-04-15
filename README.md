@@ -21,9 +21,9 @@ tqdm
 
 ## Document
 
-The paper is still under review and only the code for visualisation has been given so far, the full code will be released after the paper is accepted. Train and test dataset can be downloaded by <a href="https://pan.baidu.com/s/1Xw9w3dXDP1QcIRh8j2zM8w?pwd=sike">here</a>.
+The paper is still under review and only the code for visualisation and migration adversarial attacks has been given so far, the full code will be released after the paper is accepted. Train and test dataset can be downloaded by <a href="https://pan.baidu.com/s/1Xw9w3dXDP1QcIRh8j2zM8w?pwd=sike">here</a>.
 
-## visualisation
+## Visualisation
 
 The visualisation section is placed in the 'visualisation' folder and the code can be run as follows to obtain a visualisation of the 'comic' for FDSR and FDSR wFDL at x2 upscale factor.
 
@@ -31,4 +31,51 @@ The visualisation section is placed in the 'visualisation' folder and the code c
 cd visualisation
 python main.py
 ```
+
+## Migration adversarial attacks
+
+The papers and code for the adversarial attack section are taken from <a href="https://github.com/idearibosome/tf-sr-attack">(code)</a> and:
+
+```
+@inproceedings{choi2019evaluating,
+  title={Evaluating robustness of deep image super-resolution against adversarial attacks},
+  author={Choi, Jun-Ho and Zhang, Huan and Kim, Jun-Hyuk and Hsieh, Cho-Jui and Lee, Jong-Seok},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={303--311},
+  year={2019}
+}
+```
+
+If you need to run this part of the code, you will first need to install the following packages:
+
+```
+tensorflow 1.12+ (<2.0)
+```
+
+And open the following folders:
+
+```
+cd attack
+```
+
+First, you need to generate a sample of the attack, and you need to execute the following commands in sequence:
+
+```
+cd tf-sr-attack
+./run_all.sh
+```
+
+(If your operating system is Windows, you will need to run `run_all.bat`)
+
+After the adversarial sample has been generated, you will need to fall back to the parent directory and run the following commands in sequence to test:
+
+```
+cd ..
+python check_folder.py
+./run_test.sh
+```
+
+(If your operating system is Windows, you will need to run `run_test.bat`)
+
+Finally, you can run `drew_pic.py` to generate the results of the experiment.
 

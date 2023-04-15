@@ -1,0 +1,13 @@
+Dataset	DeFiAN	MSRN	OISR	FDSR w/ FDL	FDSR
+B100_attack_edsr_baseline_eps1	26.69	26.54	26.43	26.79	26.43
+B100_attack_edsr_baseline_eps2	25.81	25.47	25.06	26.02	25.15
+B100_attack_edsr_baseline_eps4	24.36	23.91	23.14	24.82	23.5
+B100_attack_edsr_baseline_eps8	22.34	22.07	21.09	23.26	21.81
+B100_attack_edsr_baseline_eps16	19.84	20.1	19.22	21.27	19.95
+B100_attack_edsr_baseline_eps32	16.93	17.92	17.25	18.78	17.92
+B100_attack_rcan_eps1	27.15	27.05	26.96	27.17	26.87
+B100_attack_rcan_eps2	26.95	26.8	26.62	26.99	26.47
+B100_attack_rcan_eps4	26.75	26.53	26.28	26.79	26.01
+B100_attack_rcan_eps8	26.45	26.13	25.75	26.48	25.34
+B100_attack_rcan_eps16	25.88	25.4	24.91	25.94	24.77
+B100_attack_rcan_eps32	24.4	23.8	23.41	24.64	23.62
