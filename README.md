@@ -1,6 +1,6 @@
 # FDSR_PyTorch
 
-This repository is an official PyTorch implementation of the paper "FDSR: An Interpretable Frequency Division Network for Single Image Super Resolution".
+This repository is an official PyTorch implementation of the paper "FDSR: An Interpretable Frequency Division Stepwise Process Based Single-Image Super-Resolution Network".
 
 ## Prerequisites:
 
