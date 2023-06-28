@@ -80,7 +80,7 @@ python train.py FDSR_HesRFA_32
 python train.py FDSR_HesRFA_32_FDL_l2_gaus
 ```
 
-If you only have multiple GPUs, you should first modify the json file in the `config` folder to change the `parallel_mode` there from `DP` to `DDP`, and then start the training with the following commands:
+If you have multiple GPUs, you should first modify the JSON file in the `config` folder to change the `parallel_mode` there from `DP` to `DDP`, and then start the training with the following commands:
 
 ```
 # Train FDSR
