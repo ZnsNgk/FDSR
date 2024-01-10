@@ -36,9 +36,9 @@ cd train_eval
 python check_folder.py
 
 # Test FDSR at x2, x3, and x4 upscale factors
-python test.py FDSR_HesRFA_32 --once net_x2_1000.pth
-python test.py FDSR_HesRFA_32 --once net_x3_1000.pth
-python test.py FDSR_HesRFA_32 --once net_x4_1000.pth
+python test.py FDSR_HesRFA_32_h2l --once net_x2_1000.pth
+python test.py FDSR_HesRFA_32_h2l --once net_x3_1000.pth
+python test.py FDSR_HesRFA_32_h2l --once net_x4_1000.pth
 
 # Test FDSR w/ FDL at x2, x3, and x4 upscale factors
 python test.py FDSR_HesRFA_32_FDL_l2_gaus --once net_x2_1000.pth
@@ -54,11 +54,11 @@ If you want to obtain the output image of FDSR or FDSR w/ FDL, you can do so wit
 cd train_eval
 
 # Rebuild a dataset
-python demo.py FDSR_HesRFA_32 --file net_x4_1000.pth --dataset Manga109
+python demo.py FDSR_HesRFA_32_h2l --file net_x4_1000.pth --dataset Manga109
 python demo.py FDSR_HesRFA_32_FDL_l2_gaus --file net_x4_1000.pth --dataset Manga109
 
 # Self-selected image reconstruction
-python demo.py FDSR_HesRFA_32 --file net_x4_1000.pth --input
+python demo.py FDSR_HesRFA_32_h2l --file net_x4_1000.pth --input
 python demo.py FDSR_HesRFA_32_FDL_l2_gaus --file net_x4_1000.pth --input
 ```
 
@@ -74,7 +74,7 @@ You can retrain FDSR and FDSR w/ FDL with the following commands.
 
 ```
 # Train FDSR
-python train.py FDSR_HesRFA_32
+python train.py FDSR_HesRFA_32_h2l
 
 # Train FDSR w/ FDL
 python train.py FDSR_HesRFA_32_FDL_l2_gaus
@@ -84,7 +84,7 @@ If you have multiple GPUs, you should first modify the JSON file in the `config`
 
 ```
 # Train FDSR
-python -m torch.distributed.launch --nproc_per_node=2 train.py FDSR_HesRFA_32
+python -m torch.distributed.launch --nproc_per_node=2 train.py FDSR_HesRFA_32_h2l
 
 # Train FDSR w/ FDL
 python -m torch.distributed.launch --nproc_per_node=2 train.py FDSR_HesRFA_32_FDL_l2_gaus
