@@ -1,0 +1,49 @@
+{
+    "system":{
+        "model_name": "FDSR_HesRFA",
+        "dataset": "DIV2K",
+        "model_mode": "post",
+        "color_channel": "RGB",
+        "seed": 2022,
+        "batch_size": 16,
+        "patch_size": 64,
+        "Epoch": 1000,
+        "device": "cuda:0",
+        "parallel_opts": {"parallel_mode": "DDP", "backend": "nccl"},
+        "scale_factor": [2, 3, 4],
+        "save_step": 10,
+        "weight_init": "None",
+        "loss_function": "L1_Charbonnier",
+        "optimizer": "Adam",
+        "scale_position": "init",
+        "model_args": {"freq_c": 32, "c": 64, "mode": "ideal", "color_channel": 3, "freq_order": "h2l"},
+        "loss_args": {"eps": 1e-6}
+    },
+    "learning_rate":{
+        "init_learning_rate": 1e-4,
+        "learning_rate_reset": "True",
+        "decay_mode": "Step",
+        "per_epoch": 200,
+        "decay_rate": 0.5
+    },
+    "val": {
+        "use_val": "True",
+        "val_dataset": "DIV2K"
+    },
+    "dataloader":{
+        "num_workers": 18,
+        "pic_pair": "False",
+        "shuffle": "True",
+        "drop_last": "False",
+        "pin_memory": "True",
+        "normalize": "True",
+        "data_opts":{"rotate":"True", "horizontal_flip":"True", "vertical_flip":"True", "repeat_factor":1000}
+    },
+    "test":{
+        "color_channel": "Y",
+        "drew_pic": "True",
+        "test_dataset": ["Set5", "Set14", "BSDS100", "Urban100", "Manga109"],
+        "shave": "scale",
+        "use_self_ensemble": "True"
+    }
+}

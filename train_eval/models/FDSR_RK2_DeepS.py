@@ -37,12 +37,18 @@ class Rec_Block(nn.Module):
         return out
 
 class FDSR_DS(nn.Module):
-    def __init__(self, scale, freq_c=8, c=64, mode="ideal", color_channel=3):
+    def __init__(self, scale, freq_c=8, c=64, mode="ideal", color_channel=3, freq_order="l2h"):
         super(FDSR_DS, self).__init__()
         self.color_channel = color_channel
         self.scale = scale
         self.freq_c = freq_c
         self.c = c
+        if freq_order == "h2l":
+            self.freq_rev = True
+        elif freq_order == "l2h":
+            self.freq_rev = False
+        else:
+            raise ValueError("Frequency Order can only choose 'low to high'(l2h) or 'high to low'(h2l)")
         self.displacement = Displacement_generate(scale, "bicubic", color_channel=color_channel)
         self.split = Split_freq(freq_c, mode)
         self.rec_blocks = nn.ModuleList()
@@ -56,6 +62,8 @@ class FDSR_DS(nn.Module):
     def forward(self, x):
         x = self.displacement(x)
         freq_n, mask = self.split(x)
+        if self.freq_rev:
+            freq_n = freq_n[::-1]   #frequency order from high to low
         # freq_n = torch.split(freq, self.color_channel*self.scale*self.scale, dim=1)
         feat_f = []
         for i in range(self.freq_c):

@@ -26,12 +26,18 @@ class Rec_block(nn.Module):
         return x
 
 class FDSR_woDGM(nn.Module):
-    def __init__(self, scale, freq_c=8, c=64, mode="ideal", color_channel=3):
+    def __init__(self, scale, freq_c=8, c=64, mode="ideal", color_channel=3, freq_order="l2h"):
         super(FDSR_woDGM, self).__init__()
         self.color_channel = color_channel
         self.scale = scale
         self.freq_c = freq_c
         self.c = c
+        if freq_order == "h2l":
+            self.freq_rev = True
+        elif freq_order == "l2h":
+            self.freq_rev = False
+        else:
+            raise ValueError("Frequency Order can only choose 'low to high'(l2h) or 'high to low'(h2l)")
         self.split = Split_freq(freq_c, mode)
         self.rec_blocks = nn.ModuleList()
         if (scale == 2) or (scale == 3) or (scale == 4):
@@ -46,6 +52,8 @@ class FDSR_woDGM(nn.Module):
     
     def forward(self, x):
         freq, mask = self.split(x)
+        if self.freq_rev:
+            freq = freq[::-1]   #frequency order from high to low
         mask_n = torch.split(mask, 1, dim=0)
         # freq_n = torch.split(freq, self.color_channel, dim=1)
         feat_f = []

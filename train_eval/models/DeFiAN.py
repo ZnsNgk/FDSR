@@ -244,3 +244,14 @@ class UpScale(nn.Sequential):
             raise NotImplementedError
 
         super(UpScale, self).__init__(*layers)
+
+if __name__ == "__main__":
+    scale = 3
+    model = Generator(scale=scale, n_channels=32, n_blocks=10, n_modules=5)
+    x = torch.randn([1, 1, 3, 480//scale, 360//scale])
+    from thop import profile, clever_format
+    with torch.no_grad():
+        flops, params = profile(model, inputs=x)
+        flops, params = clever_format([flops, params], "%.6f")
+    print(flops)
+    print(params)

@@ -162,7 +162,12 @@ class CARN(nn.Module):
                 nn.init.constant_(module.weight, 1)
 
 if __name__ == "__main__":
-    model = CARN(2)
-    x = torch.randn([1, 3, 64, 64])
-    y = model(x)
-    print(y.shape)
+    scale = 3
+    model = CARN(scale=scale)
+    x = torch.randn([1, 1, 3, 1280//scale, 720//scale])
+    from thop import profile, clever_format
+    with torch.no_grad():
+        flops, params = profile(model, inputs=x)
+        flops, params = clever_format([flops, params], "%.6f")
+    print(flops)
+    print(params)

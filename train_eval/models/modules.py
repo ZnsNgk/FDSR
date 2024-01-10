@@ -98,8 +98,9 @@ class bicubic_imresize(nn.Module):
     """
     An pytorch implementation of imresize function in MATLAB with bicubic kernel.
     """
-    def __init__(self):
+    def __init__(self, scale_factor):
         super(bicubic_imresize, self).__init__()
+        self.scale = scale_factor
 
     def cubic(self, x):
         absx = torch.abs(x)
@@ -172,14 +173,14 @@ class bicubic_imresize(nn.Module):
 
         return weight0, weight1, indice0, indice1
 
-    def forward(self, input, scale=1 / 4):
+    def forward(self, input):
         if len(input.shape) == 3:
             input = input.unsqueeze(0)
         [b, c, h, w] = input.shape
-        output_size = [b, c, int(h * scale), int(w * scale)]
+        output_size = [b, c, int(h * self.scale), int(w * self.scale)]
         cuda_flag = input.is_cuda
 
-        weight0, weight1, indice0, indice1 = self.contribute([h, w], [int(h * scale), int(w * scale)], scale, cuda_flag)
+        weight0, weight1, indice0, indice1 = self.contribute([h, w], [int(h * self.scale), int(w * self.scale)], self.scale, cuda_flag)
         weight0 = weight0.squeeze(0)
         indice0 = indice0.squeeze(0).long()
         out = input[:, :, (indice0 - 1), :] * (weight0.unsqueeze(0).unsqueeze(1).unsqueeze(4))
@@ -197,7 +198,12 @@ class Displacement_generate(nn.Module):
     def __init__(self, scale, mode="bicubic", color_channel=1):
         super(Displacement_generate, self).__init__()
         self.scale = scale
-        self.up = bicubic_imresize()
+        if mode == "bicubic":
+            self.up = bicubic_imresize(scale_factor=scale)
+        elif mode == "nearest":
+            self.up = nn.UpsamplingNearest2d(scale_factor=scale)
+        elif mode == "bilinear":
+            self.up = nn.UpsamplingBilinear2d(scale_factor=scale)
         self.displacement = nn.Conv2d(color_channel, color_channel*scale*scale, scale, scale, 0, groups=color_channel, bias=False)
         p = numpy.arange(scale*scale, dtype="int64")
         p = torch.from_numpy(p)
@@ -211,6 +217,6 @@ class Displacement_generate(nn.Module):
             params.requires_grad = False
     
     def forward(self, x):
-        x = self.up(x, self.scale)
+        x = self.up(x)
         x = self.displacement(x)
         return x

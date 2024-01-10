@@ -13,7 +13,6 @@ from .FDSR_pre import FDSR_pre
 from .FDSR_DeFiAM import FDSR as FDSR_DeFiAM
 from .FDSR_HesRFA import FDSR as FDSR_HesRFA
 
-
 model_list = {
     "FDSR_woDGM": FDSR_woDGM,
     "FDSR_wStep": FDSR_wStep,
@@ -24,7 +23,7 @@ model_list = {
     "OISR": OISR,
     "CARN": CARN,
     "FDSR_HesRFA": FDSR_HesRFA,
-    "FDSR_DeFiAM": FDSR_DeFiAM
+    "FDSR_DeFiAM": FDSR_DeFiAM,
 }
 
 def get_model(model_name, **kwargs):

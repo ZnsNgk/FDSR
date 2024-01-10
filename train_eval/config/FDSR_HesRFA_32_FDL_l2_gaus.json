@@ -8,16 +8,16 @@
         "batch_size": 16,
         "patch_size": 64,
         "Epoch": 1000,
-        "device": "cuda:0",
-        "parallel_opts": {"parallel_mode": "DP", "backend": "nccl"},
+        "device": "cuda:0,1",
+        "parallel_opts": {"parallel_mode": "DDP", "backend": "nccl"},
         "scale_factor": [2, 3, 4],
         "save_step": 10,
         "weight_init": "None",
         "loss_function": "L2_FDL",
         "optimizer": "Adam",
         "scale_position": "init",
-        "model_args": {"freq_c": 32, "c": 64, "mode": "ideal", "color_channel": 3, "use_FDL": true},
-        "loss_args": {"freq_c": 32, "mode": "gaussian"}
+        "model_args": {"freq_c": 32, "c": 64, "mode": "ideal", "color_channel": 3, "use_FDL": true, "freq_order": "h2l"},
+        "loss_args": {"freq_c": 32, "mode": "gaussian", "freq_order": "h2l"}
     },
     "learning_rate":{
         "init_learning_rate": 1e-4,
