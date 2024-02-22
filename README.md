@@ -92,9 +92,65 @@ python -m torch.distributed.launch --nproc_per_node=2 train.py FDSR_HesRFA_32_FD
 
 ## Visualisation
 
-coming soon.
+The visualisation section is placed in the 'visualisation' folder and the code can be run as follows to obtain a visualisation of the 'comic' for FDSR and FDSR wFDL at x2 upscale factor.
+
+```
+cd visualisation
+python main.py
+```
 
 ## Migration adversarial attacks
 
-coming soon.
+The papers and code for the adversarial attack section are taken from <a href="https://github.com/idearibosome/tf-sr-attack">(code)</a> and:
+
+```
+@inproceedings{choi2019evaluating,
+  title={Evaluating robustness of deep image super-resolution against adversarial attacks},
+  author={Choi, Jun-Ho and Zhang, Huan and Kim, Jun-Hyuk and Hsieh, Cho-Jui and Lee, Jong-Seok},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={303--311},
+  year={2019}
+}
+```
+
+If you need to run this part of the code, you will first need to install the following packages:
+
+```
+tensorflow 1.12+ (<2.0)
+```
+
+And open the following folders:
+
+```
+cd attack
+```
+
+First, you need to generate a sample of the attack, and you need to execute the following commands in sequence:
+
+```
+cd tf-sr-attack
+./run_all.sh
+```
+
+(If your operating system is Windows, you will need to run `run_all.bat`)
+
+After the adversarial sample has been generated, you will need to fall back to the parent directory and run the following commands in sequence to test:
+
+```
+cd ..
+python check_folder.py
+./run_test.sh
+```
+
+(If your operating system is Windows, you will need to run `run_test.bat`)
+
+Finally, you can run `drew_pic.py` to generate the results of the experiment.
+
+## DGM_conv_visualization
+
+This is a visualization of the experiments in subsection 4.4.3 of the paper for the use of different convolutional layers in the DGM. We trained and visualized the model using two different normalized convolutions, ordinary convolution and our proposed convolution, respectively. In this case, all `.pth` files are our trained models, and the DGM convolutional layer in the above models can be visualized by simply running the following code:
+
+```
+python main.py
+```
 

@@ -1,0 +1,49 @@
+{
+    "system":{
+        "model_name": "DeFiAN",
+        "dataset": "DIV2K",
+        "model_mode": "post",
+        "color_channel": "RGB",
+        "seed": 2022,
+        "batch_size": 16,
+        "patch_size": 64,
+        "Epoch": 1000,
+        "device": "cuda:0",
+        "parallel_opts": {"parallel_mode": "DP", "backend": "nccl"},
+        "scale_factor": [4],
+        "save_step": 10,
+        "weight_init": "None",
+        "loss_function": "L1",
+        "optimizer": "Adam",
+        "scale_position": "init",
+        "model_args": {"n_channels": 32, "n_blocks": 10, "n_modules": 5}
+    },
+    "learning_rate":{
+        "init_learning_rate": 1e-4,
+        "learning_rate_reset": "True",
+        "decay_mode": "Step",
+        "per_epoch": 200,
+        "decay_rate": 0.5
+    },
+    "val": {
+        "use_val": "True",
+        "val_dataset": "DIV2K"
+    },
+    "dataloader":{
+        "num_workers": 12,
+        "pic_pair": "False",
+        "shuffle": "True",
+        "drop_last": "False",
+        "pin_memory": "True",
+        "normalize": "True",
+        "data_opts":{"rotate":"True", "horizontal_flip":"True", "vertical_flip":"True", "repeat_factor":1000}
+    },
+    "test":{
+        "color_channel": "Y",
+        "drew_pic": "True",
+        "indicators": ["PSNR"],
+        "test_dataset": ["B100_attack_edsr_baseline_eps1", "B100_attack_edsr_baseline_eps2", "B100_attack_edsr_baseline_eps4", "B100_attack_edsr_baseline_eps8", "B100_attack_edsr_baseline_eps16",  "B100_attack_edsr_baseline_eps32", 
+         "B100_attack_carn_eps1", "B100_attack_carn_eps2", "B100_attack_carn_eps4", "B100_attack_carn_eps8", "B100_attack_carn_eps16",  "B100_attack_carn_eps32"],
+        "shave": "scale"
+    }
+}
