@@ -16,15 +16,23 @@ class L1_Charbonnier_loss(torch.nn.Module):
         return loss
 
 class L2_Deep_Supervision_Frequency_Division_Loss(torch.nn.Module):
-    def __init__(self, freq_c=8, color_channel=3, mode="butterworth"):
+    def __init__(self, freq_c=8, color_channel=3, mode="butterworth", freq_order="l2h"):
         super(L2_Deep_Supervision_Frequency_Division_Loss, self).__init__()
         self.color_channel = color_channel
+        if freq_order == "h2l":
+            self.freq_rev = True
+        elif freq_order == "l2h":
+            self.freq_rev = False
+        else:
+            raise ValueError("Frequency Order can only choose 'low to high'(l2h) or 'high to low'(h2l)")
         self.loss = torch.nn.MSELoss()
         self.Split = Split_freq(freq_c, mode=mode)
         
     def forward(self, X, Y):
         x_up, X_f = X
         Y_f, _ = self.Split(Y)
+        if self.freq_rev:
+            Y_f = Y_f[::-1]
         # Y_f = torch.split(Y, self.color_channel, dim=1)
         losses = []
         losses.append(self.loss(x_up, Y))
@@ -32,17 +40,25 @@ class L2_Deep_Supervision_Frequency_Division_Loss(torch.nn.Module):
             l = self.loss(x, y)
             losses.append(l)
         return sum(losses)
-
+    
 class L1_Deep_Supervision_Frequency_Division_Loss(torch.nn.Module):
-    def __init__(self, freq_c=8, color_channel=3, mode="butterworth"):
+    def __init__(self, freq_c=8, color_channel=3, mode="butterworth", freq_order="l2h"):
         super(L1_Deep_Supervision_Frequency_Division_Loss, self).__init__()
         self.color_channel = color_channel
+        if freq_order == "h2l":
+            self.freq_rev = True
+        elif freq_order == "l2h":
+            self.freq_rev = False
+        else:
+            raise ValueError("Frequency Order can only choose 'low to high'(l2h) or 'high to low'(h2l)")
         self.loss = torch.nn.L1Loss()
         self.Split = Split_freq(freq_c, mode=mode)
         
     def forward(self, X, Y):
         _, X_f = X
         Y_f, _ = self.Split(Y)
+        if self.freq_rev:
+            Y_f = Y_f[::-1]
         # Y_f = torch.split(Y, self.color_channel, dim=1)
         losses = []
         for x, y in zip(X_f, Y_f):
@@ -51,15 +67,23 @@ class L1_Deep_Supervision_Frequency_Division_Loss(torch.nn.Module):
         return sum(losses)
 
 class L1C_Deep_Supervision_Frequency_Division_Loss(torch.nn.Module):
-    def __init__(self, freq_c=8, color_channel=3, eps=1e-6, mode="butterworth"):
+    def __init__(self, freq_c=8, color_channel=3, eps=1e-6, mode="butterworth", freq_order="l2h"):
         super(L1C_Deep_Supervision_Frequency_Division_Loss, self).__init__()
         self.color_channel = color_channel
+        if freq_order == "h2l":
+            self.freq_rev = True
+        elif freq_order == "l2h":
+            self.freq_rev = False
+        else:
+            raise ValueError("Frequency Order can only choose 'low to high'(l2h) or 'high to low'(h2l)")
         self.loss = L1_Charbonnier_loss(eps)
         self.Split = Split_freq(freq_c, mode=mode)
         
     def forward(self, X, Y):
         x_up, X_f = X
         Y_f, _ = self.Split(Y)
+        if self.freq_rev:
+            Y_f = Y_f[::-1]
         # Y_f = torch.split(Y, self.color_channel, dim=1)
         losses = []
         losses.append(self.loss(x_up, Y))
@@ -74,7 +98,7 @@ loss_func_list = {
     "L1_Charbonnier": L1_Charbonnier_loss,
     "L2_FDL": L2_Deep_Supervision_Frequency_Division_Loss,
     "L1C_FDL": L1C_Deep_Supervision_Frequency_Division_Loss,
-    "L1_FDL": L1_Deep_Supervision_Frequency_Division_Loss
+    "L1_FDL": L1_Deep_Supervision_Frequency_Division_Loss,
 }
 
 def get_loss_func(name, **kwargs):
@@ -99,6 +123,7 @@ cal_list = {
     "L2_FDL": loss_PSNR_L2,
     "L1C_FDL": loss_PSNR_L1,
     "L1_FDL": loss_PSNR_L1,
+    "L2_FDL_H2L": loss_PSNR_L2,
 }
 
 cal_list_norm = {
@@ -108,6 +133,7 @@ cal_list_norm = {
     "L2_FDL": loss_PSNR_L2_norm,
     "L1C_FDL": loss_PSNR_L1_norm,
     "L1_FDL": loss_PSNR_L1_norm,
+    "L2_FDL_H2L": loss_PSNR_L2_norm,
 }
 
 def get_loss_PSNR(name, normal):
