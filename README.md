@@ -1,5 +1,9 @@
 # FDSR_PyTorch
 
+![Stars](https://img.shields.io/github/stars/ZnsNgk/FDSR)
+[![Visits Badge](https://badges.pufler.dev/visits/ZnsNgk/FDSR)](https://badges.pufler.dev/visits/ZnsNgk/FDSR)
+![GitHub forks](https://img.shields.io/github/forks/ZnsNgk/FDSR?color=blue&label=Forks) 
+
 This repository is an official PyTorch implementation of the paper "FDSR: An Interpretable Frequency Division Stepwise Process Based Single-Image Super-Resolution Network".
 
 ## Prerequisites:
